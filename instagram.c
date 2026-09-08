@@ -64,17 +64,51 @@ void imprime(TGrafo *vertice) {
 
 int numero_seguidos(TGrafo *g, char *nome) {
     //TODO: Implementar essa função
+    while(g){
+        if(strcmp(g->nome,nome) == 0)
+        {
+            TVizinho* aux = g->prim_vizinho;
+            int contador = 0;
+            while(aux){
+                contador ++;
+                aux = aux->prox;
+            }
+            return contador;
+        }
+        else{g = g->prox;}
+    }
     return 0;
 }
-
 int seguidores(TGrafo *g, char *nome, int imprime) {
     //TODO: Implementar essa função
-    return 0;
+    int cont =0;
+    while(g){
+        if(strcmp(g->nome, nome)!=0)
+        {
+            TVizinho* aux = g->prim_vizinho;
+            while(aux){
+                if(strcmp(aux->nome, nome)==0){
+                    cont++;
+                    if(imprime){printf("%s ", g->nome);}
+                    break;
+                }
+                aux = aux->prox;
+            }
+        }
+        g = g->prox;
+    }
+    return cont;
 }
 
 TGrafo *mais_popular(TGrafo *g) {
-    //TODO: Implementar essa função
-    return NULL;
+    TGrafo* maior = g;
+    TGrafo* aux = g;
+    while(aux)
+    {
+        if(seguidores(g, aux->nome, 0) > seguidores(maior, maior->nome,0)){maior = aux;}
+        aux = aux->prox;
+    }
+    return maior;
 }
 
 int segue_mais_velho(TGrafo *g, int imprime) {
@@ -143,6 +177,7 @@ int main() {
     //Le nome de pessoa
     scanf("%s", nome);
 
+
     //Encontra o número de seguidos dessa pessoa
     printf("SEGUIDOS por %s: %d\n", nome, numero_seguidos(g, nome));
 
@@ -156,9 +191,12 @@ int main() {
     p = mais_popular(g);
     printf("MAIS POPULAR: %s\n", p->nome);
 
+/*
     //Encontra as pessoas que seguem apenas pessoas mais velhas
     printf("SEGUEM APENAS PESSOAS MAIS VELHAS:\n");
     segue_mais_velho(g,1);
+*/
 
     libera_vertice(g);
+
 }
